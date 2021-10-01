@@ -1,0 +1,48 @@
+.center{
+    padding-top:100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error{
+    background-color: rgb(255, 211, 211);
+    padding: 10px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+form{
+    width: 300px;
+    font-size: 18px;
+
+    &>*{
+        display: block;
+        margin-bottom: 10px;
+        width: 100%;      
+    }
+
+    input{
+        height: 24px;
+        padding: 0 5px;
+    }
+
+    .btn{
+        text-align: center;
+
+        button{
+            border: none;
+            cursor: pointer;
+            color: white;
+            padding: 5px 10px;
+            background-color:#000;
+            font-weight: bold;
+            font-size: 16px;
+
+            &:disabled{
+                background-color: lighten(#000, 70%);
+                cursor: initial;
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "clients":"Clients",
+    "logout" : "Logout",
+    "accounts":"Accounts",
+    "close account": "To close an account, click on its status",
+    "add account":"Add new",
+    "add alient":"Add Client",
+    "filter":"Filter",
+    "firstname":"Firstname",
+    "lastname":"Lastname",
+    "person id":"Person Id",
+    "gender":"Gender",
+    "phone number":"Phone Number",
+    "address":"Address",
+    "delete":"Delete",
+    "edit":"Edit",
+    "number": "Number",
+    "type":"Type",
+    "currency":"Currency",
+    "status":"Status"
+}

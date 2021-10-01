@@ -1,0 +1,56 @@
+<div class="clients" *ngIf="!isLoading">
+    <div class="btn-group">
+        <button type="button" [routerLink]="['/clients', 'new']">{{'add client' | translate}}</button>
+        <button type="button" (click) = "filter = true">{{'filter' | translate}}</button>
+    </div>
+    <div class="sorting" (click)="onSort($any($event.target).innerText)">
+        <p>{{'firstname' | translate}}</p>
+        <p>{{'lastname' | translate}}</p>
+        <p>{{'person id' | translate}}</p>
+        <p>{{'gender' | translate}}</p>
+        <p>{{'phone number' | translate}}</p>
+    </div>
+    <div *ngFor="let client of visibleClients" class="client" [routerLink]="['/clients', client.id]">
+        <p>{{ client.firstname }}</p>
+        <p>{{ client.lastname }}</p>
+        <p>{{ client.personId }}</p>
+        <p>{{ client.gender }}</p>
+        <p>{{ client.phoneNumber }}</p>
+    </div>
+
+    <div class="navigation" *ngIf="pages.length > 1">
+        <ul>
+            <li *ngFor="let page of pages"><a (click)="onNavigate(page)">{{ page }}</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="filter" *ngIf = "filter">
+    <div class="back">
+        <form #form="ngForm" (ngSubmit)="onFilter(form)">
+            <label for="gender">Gender</label>
+            <select name="gender" id="gender" [ngModel] = "'none'">
+                <option value="none">none</option>
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+            </select>
+
+            <label for="city">City</label>
+            <select name="city" id="city" [ngModel] = "'none'">
+                <option value="none">none</option>
+                <option *ngFor = "let city of cities" [value]="city">{{city}}</option>
+            </select>
+
+            <label for="country">Country</label>
+            <select name="country" id="country" [ngModel] = "'none'">
+                <option value="none">none</option>
+                <option *ngFor = "let country of countries" [value]="country">{{country}}</option>
+            </select>
+
+            <div class="btn-group-filter">
+                <button type="button" id="cancel" (click) = "filter = false">Cancel</button>
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

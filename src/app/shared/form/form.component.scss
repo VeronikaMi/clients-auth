@@ -1,0 +1,82 @@
+form{
+    width: 50%;
+    margin:50px auto;
+
+    .error{
+        color: red;
+        font-size: 13px;
+    }
+
+    &>*{
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    input{
+        width: 70%;
+        height: 20px;
+        padding: 10px;
+    }
+
+    .btn-group{
+        text-align: right;
+        &>*{
+            margin-left: 10px;
+            border: none;
+            color:#fff;
+            background-color: #000;
+            cursor: pointer;
+            padding: 10px;
+
+            &:hover{
+                box-shadow: 3px 3px 10px -3px rgba(0,0,0,0.61);
+            }
+        }
+        button:disabled{
+            background-color: #777;
+            cursor: initial;
+            &:hover{
+                box-shadow: none;
+            }
+        }
+
+        #cancel{
+            border: 1px solid #000;
+            color:#000;
+            background-color: #fff;
+        }
+
+
+
+    }
+
+    .address{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        label{
+            display: block;
+            margin: 5px 0;
+        }
+        input{
+            width:100%;
+        }
+    }
+
+    input[type="file"]{
+        display: none;
+    }
+
+    .upload{
+        color: #fff;
+        cursor: pointer;
+        padding:10px;
+        width: 120px;
+        background-color: #000;
+    }
+}
+
+
+
+
+

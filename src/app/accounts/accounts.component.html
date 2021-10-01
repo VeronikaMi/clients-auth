@@ -1,0 +1,77 @@
+<div class="accounts-container">
+    <h3>{{'accounts' | translate}}</h3>
+    <p>{{ 'close account' | translate }}</p>
+    <div class="btn-group">
+        <button type="button" (click) = "showForm = true">{{ 'add account' | translate }}</button>
+    </div>
+
+    <div class="new-account" *ngIf = "showForm">
+        <form #form = "ngForm" (ngSubmit) = "onSubmit(form)">
+            <label for="accountNumber">Account Number*</label>
+            <p class="error" *ngIf = "accountNumber.errors?.required && accountNumber.touched">This field is required</p>
+            <p class="error" *ngIf = "accountNumber.errors?.pattern">The format is not correct</p>   
+            <p class="error" *ngIf = "isNotUnique">The account number is not inique</p>        
+            <input type="text" 
+                    name="accountNumber" 
+                    id="accountNumber"
+                    ngModel 
+                    #accountNumber = "ngModel"
+                    required 
+                    pattern="^[0-9]{2}OL[0-9]{12}$"
+                    (input) = "isNotUnique = false">
+
+            <label for="clientId">Client Id*</label>
+            <p class="error" *ngIf = "clientId.errors?.required && clientId.touched">This field is required</p>
+            <input type="number" name="clientId" ngModel id="clientId" min="1" required #clientId = "ngModel">
+
+            <label for="accountType">Account Type*</label>
+            <p class="error" *ngIf = "accountType.errors?.required && accountType.touched">This field is required</p>
+            <select name="accountType" id="accountType" [ngModel] = "'CURRENT'" required #accountType = "ngModel">
+                <option value="CURRENT">CURRENT</option>
+                <option value="SAVING">SAVING</option>
+                <option value="ACCUMULATIVE">ACCUMULATIVE</option>
+            </select>
+
+            <label for="currency">Currency*</label>
+            <p class="error" *ngIf = "currency.errors?.required && currency.touched">This field is required</p>
+            <select name="currency" id="currency" [ngModel] = "'GEL'" required #currency = "ngModel">
+                <option value="GEL">GEL</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+            </select>
+
+            <label for="status">Status*</label>
+            <p class="error" *ngIf = "status.errors?.required && status.touched">This field is required</p>
+            <select name="status" id="status" [ngModel] = "'ACTIVE'" required #status = "ngModel">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="CLOSED">CLOSED</option>
+            </select>
+            <div class="btn-group">
+                <button type="button" id="cancel" (click) = "showForm = false">Cancel</button>
+                <button type="submit">Save</button>
+            </div>
+
+        </form>
+    </div>
+
+    <app-loading-spinner *ngIf = "isLoading"></app-loading-spinner>
+    <div class="accounts" *ngIf = "!isLoading">
+        <div class="titles">
+            <p>{{'number' | translate}}</p>
+            <p>{{'type' | translate}}</p>
+            <p>{{'currency' | translate}}</p>
+            <p>{{'status' | translate}}</p>
+        </div>
+        <p *ngIf = "accounts.length === 0">No accounts</p>
+        <div class="account" *ngFor = "let account of accounts; let i = index">
+            <p>{{ account.accountNumber }}</p>
+            <p>{{ account.accountType }}</p>
+            <p>{{ account.currency }}</p>
+            <p id="status" (click) = "closeAccount(i)">{{ account.status }}</p>
+        </div>
+    </div>
+
+</div>
+
+
+

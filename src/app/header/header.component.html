@@ -1,0 +1,16 @@
+<div class="header">
+    <div class="left">
+        <span class="logo">Logo</span>
+        <ul>
+            <li routerLinkActive = "active">
+                <a [routerLink] = "['/clients']" >{{'clients' | translate}}</a></li>
+        </ul>   
+    </div>
+    <div class="right">
+        <select id="gender" [value] = "lang" (change) = "onChangeLan($any($event.target).value)">
+            <option value="en">English</option>
+            <option value="ge">Georgian</option>
+        </select>
+        <button type="button" (click) = "onLogout()">{{'logout' | translate}}</button>
+    </div>
+</div>

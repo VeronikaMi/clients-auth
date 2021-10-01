@@ -1,0 +1,96 @@
+<form #form="ngForm" (ngSubmit)="onSubmit(form)" *ngIf = "!isLoading">
+    <label for="name">Name*</label>
+    <p class="error" *ngIf = "firstname.errors?.required && firstname.touched">This field is required</p>
+    <p class="error" *ngIf = "firstname.errors?.pattern">The format is not correct</p>
+    <input type="text" 
+            id="name" 
+            name="firstname"
+            [ngModel] = "isEdit? client.firstname : ''"
+            #firstname = "ngModel"
+            required
+            pattern="([A-Za-z]{2,50}|[ა-ჰ]{2,50})">
+
+    <label for="lastname">Lastname*</label>
+    <p class="error" *ngIf = "lastname.errors?.required && lastname.touched">This field is required</p>
+    <p class="error" *ngIf = "lastname.errors?.pattern">The format is not correct</p>
+    <input type="text"
+            id="lastname" 
+            name="lastname" 
+            [ngModel] ="isEdit? client.lastname : ''"
+            #lastname = "ngModel"
+            required
+            pattern="([A-Za-z]{2,50}|[ა-ჰ]{2,50})">
+
+    <label for="gender">Gender</label>
+    <select name="gender" id="gender" [ngModel] = "isEdit? client.gender :'MALE'">
+        <option value="MALE">MALE</option>
+        <option value="FEMALE">FEMALE</option>
+    </select>
+
+    <label for="personalId">Personal Id*</label>
+    <p class="error" *ngIf = "personId.errors?.required && personId.touched">This field is required</p>
+    <p class="error" *ngIf = "personId.errors?.pattern">The format is not correct</p>
+    <p class="error" *ngIf = "notUniqueId">This id already exists</p>
+    <input type="text" 
+            id="personalId" 
+            name="personId" 
+            [ngModel] ="isEdit? client.personId : ''"
+            #personId = "ngModel" 
+            required
+            pattern="[0-9]{11}"
+            (input) = "notUniqueId = false">
+
+    <label for="phoneNumber">Phone Number*</label>
+    <p class="error" *ngIf = "phoneNumber.errors?.required && phoneNumber.touched ">This field is required</p>
+    <p class="error" *ngIf = "phoneNumber.errors?.pattern">The format is not correct</p>
+    <input type="text" 
+            id="phoneNumber" 
+            name="phoneNumber" 
+            [ngModel] ="isEdit? client.phoneNumber : ''"
+            #phoneNumber = "ngModel" 
+            required
+            pattern="^5[0-9]{8}">
+
+    <p>Address</p>
+    <div class="address" ngModelGroup = "address">
+        <div class="">
+            <label for="country">Country</label>
+            <input type="text" 
+                    id="country" 
+                    name="country" 
+                    [ngModel] = "isEdit? client.address.country : ''">
+        </div>
+        <div class="">
+            <label for="city">City</label>
+            <input type="text" 
+                    id="city" 
+                    name="city" 
+                    [ngModel] = "isEdit? client.address.city : ''">
+        </div>
+        <div class="">
+            <label for="street">Address</label>
+            <input type="text" 
+                    id="street" 
+                    name="street" 
+                    [ngModel] = "isEdit? client.address.street : ''">
+        </div>
+    </div>
+
+    <label for="avatar" class="upload">
+        Upload Picture
+        <input type="file" 
+        id="avatar" 
+        name="photo"
+        accept="image/png, image/jpeg"
+        ngModel
+        #img = "ngModel"
+        (change) = "getImgInBase64($any($event.target).files)">
+    </label>
+    <img *ngIf="img.value" [src]="imageUrl" alt="avatar">
+    <!-- <p *ngIf = "img.value">{{ img.value }}</p> -->
+
+    <div class="btn-group">
+        <button type="button" id="cancel" [routerLink] = "['/clients']">Cancel</button>
+        <button type="submit" [disabled] = "!form.valid">Save</button>
+    </div>
+</form>

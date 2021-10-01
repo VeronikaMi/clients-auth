@@ -1,0 +1,36 @@
+<div class="client" *ngIf = "!isLoading">
+    <div class="row">
+        <img [src]="photo" alt="avatar">
+    </div>
+    <div class="row">
+        <p class="title">{{'firstname' | translate}}</p>
+        <p class="body">{{ client.firstname }}</p>
+    </div>
+    <div class="row">
+        <p class="title">{{'lastname' | translate}}</p>
+        <p class="body">{{ client.lastname }}</p>
+    </div>
+    <div class="row">
+        <p class="title">{{'gender' | translate}}</p>
+        <p class="body">{{ client.gender }}</p>
+    </div>
+    <div class="row">
+        <p class="title">{{'person id' | translate}}</p>
+        <p class="body">{{ client.personId }}</p>
+    </div>
+    <div class="row">
+        <p class="title">{{'phone number' | translate}}</p>
+        <p class="body">{{ client.phoneNumber }}</p>
+    </div>
+    <div class="row">
+        <p class="title">{{'address' | translate}}</p>
+        <p class="body">{{ client.address.country }}, {{ client.address.city }}, {{ client.address.street }} </p>
+    </div>
+
+    <div class="btn-group">
+        <button type="button" class="delete" (click) = "onDelete()">{{'delete' | translate}}</button>
+        <button type="button" class="edit" (click) = "onEdit()">{{'edit' | translate}}</button>
+    </div>
+</div>
+
+<router-outlet></router-outlet>

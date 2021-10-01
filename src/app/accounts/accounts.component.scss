@@ -1,0 +1,67 @@
+.accounts-container{
+    min-width:450px;
+    max-width: 60%;
+    margin:50px auto;
+
+    .accounts{
+        p{
+            width:25%;
+            text-align: center;
+        }
+        .titles, .account{
+            display: flex;
+            margin:15px 0;
+            padding: 10px;
+        }
+
+        .titles{
+            background-color: #000;
+            color: #fff;
+        }
+
+        .account{
+            border: 1px solid #000;
+        }
+
+        #status:hover{
+            cursor: pointer;
+            color: lighten($color: #000000, $amount: 50%);
+        }
+    }
+}
+
+.btn-group{
+    text-align: right;
+    button{
+        margin-left: 20px;
+        cursor: pointer;
+        border: none;
+        color:#fff;
+        background-color:#000;;
+        padding: 10px;
+
+        &:hover{
+            background-color:lighten($color: #000000, $amount: 20%)
+        }
+    }
+    #cancel{
+        border: 1px solid #000;
+        color:#000;
+        background-color: #fff;
+    }
+}
+
+
+form {
+    &>*{
+        display: block;
+        margin-bottom: 10px;
+    }
+    .error{
+        color: red;
+        font-size: 13px;
+    }
+
+}
+
+
