@@ -18,7 +18,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(){
     this.sub = this.appService.loggedIn.subscribe(value=>{
       this.showHeader = value;
-      console.log("showheader  " + this.showHeader)
     })
   }
 

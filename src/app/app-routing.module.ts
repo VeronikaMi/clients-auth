@@ -13,11 +13,11 @@ const routes: Routes = [
   // { path:'clients', loadChildren:()=>import('./clients/clients.module').then(m=>m.ClientsModule)},
 
   { path:'clients', component:ClientsComponent, canActivate:[AuthGuard]},
-  { path:'clients/new', component:FormComponent },
-  { path:'clients/:id', component:ClientDetailsComponent, children:[
+  { path:'clients/new', component:FormComponent , canActivate:[AuthGuard] },
+  { path:'clients/:id', component:ClientDetailsComponent, canActivate:[AuthGuard], children:[
     { path: '', component:AccountsComponent }
   ] },
-  { path:'clients/:id/edit', component:FormComponent }
+  { path:'clients/:id/edit', component:FormComponent , canActivate:[AuthGuard] }
 ];
 
 @NgModule({
