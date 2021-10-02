@@ -86,7 +86,7 @@
         #img = "ngModel"
         (change) = "getImgInBase64($any($event.target).files)">
     </label>
-    <img *ngIf="img.value" [src]="imageUrl" alt="avatar">
+    <img *ngIf="img.value" [src]="imageUrl" alt="avatar" #img>
     <!-- <p *ngIf = "img.value">{{ img.value }}</p> -->
 
     <div class="btn-group">

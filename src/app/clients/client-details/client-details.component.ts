@@ -26,9 +26,9 @@ export class ClientDetailsComponent implements OnInit {
       this.id = +params["id"];
        this.clientsService.getClients().subscribe(clients=>{
         this.client = clients.find(client=>client.id === this.id);
-        // if(this.client.photo !== ""){
-        //   this.photo = window.atob(this.client.photo.split("base64,")[1].split("+")[0]);
-        //   }
+        if(this.client.photo !== ""){
+          this.photo = this.client.photo;
+          }
         this.isLoading = false;
       });
     })

@@ -57,12 +57,15 @@ export class FormComponent implements OnInit {
 
   getImgInBase64(files:FileList){
     this.selectedFile = files[0];
-    this.imageUrl = this.domSanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(this.selectedFile)) as string;
-    // this.image = window.btoa(this.imageUrl);
+
     let reader = new FileReader();
-    reader.readAsDataURL(this.selectedFile as Blob);
+    reader.readAsDataURL(this.selectedFile as Blob); //for preview
+
     reader.onload = ()=>{
       this.image = reader.result as string;
+      this.imageUrl = reader.result as string;
     }
+
   }
+
 }
