@@ -11,7 +11,6 @@ import { AppService } from "../app.service";
 export class ClientsService {
     clients: Client[] = [];
     notUniqueId: Subject<boolean> = new Subject();
-    // previousSort: string;
 
     constructor(private http: HttpClient,
         private router: Router,

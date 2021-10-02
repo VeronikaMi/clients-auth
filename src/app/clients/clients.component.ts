@@ -51,17 +51,6 @@ export class ClientsComponent implements OnInit,OnDestroy {
 
         // sort
         this.visibleClients = localStorage.getItem("sort")? this.clientsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients,true) : this.visibleClients;
-        
-        // if(localStorage.getItem("sort") && JSON.parse(localStorage.getItem("sort")).reversed){
-        //   this.visibleClients = this.clientsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients);
-        //   // this.visibleClients =  this.clientsService.sortClients(JSON.parse(localStorage.getItem("sort")).currentSort, this.visibleClients); 
-        //   this.visibleClients = this.visibleClients.reverse();
-          
-        // }
-        // else{
-        //   this.visibleClients = localStorage.getItem("sort") ? this.clientsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients) : this.visibleClients;
-        //   // this.visibleClients = localStorage.getItem("sort") ? this.clientsService.sortClients(JSON.parse(localStorage.getItem("sort")).currentSort, this.visibleClients) : this.visibleClients;
-        // }
 
         this.isLoading = false;
       })
@@ -76,7 +65,8 @@ export class ClientsComponent implements OnInit,OnDestroy {
     localStorage.setItem("page", page);
     this.pageIndex = page-1;
     this.visibleClients = this.paged[this.pageIndex];
-    // this.visibleClients = localStorage.getItem("sort") ? this.clientsService.sortClients(localStorage.getItem("sort"), this.visibleClients) : this.visibleClients;
+    this.visibleClients = localStorage.getItem("sort")? this.clientsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients) : this.visibleClients;
+
   }
 
   showFilter(){
