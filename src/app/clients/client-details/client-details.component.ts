@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Client,Account } from 'src/app/shared/models';
-import { ClientsService } from '../clients.service';
+import { ClientsService } from '../clients-auth.service';
 
 @Component({
   selector: 'app-client-details',

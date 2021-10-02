@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ClientsService } from 'src/app/clients/clients.service';
+import { ClientsService } from 'src/app/clients/clients-auth.service';
 import { Client } from '../models';
 
 @Component({

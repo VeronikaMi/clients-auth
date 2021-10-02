@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ClientsService } from '../clients/clients.service';
+import { ClientsService } from '../clients/clients-auth.service';
 import { Client,Account } from '../shared/models';
 import { AccountsService } from './accounts.service';
 

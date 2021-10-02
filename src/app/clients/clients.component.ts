@@ -1,7 +1,8 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Client } from '../shared/models';
-import { ClientsService } from './clients.service';
+import { ClientsService } from './clients-auth.service';
+import { ClientsOperationsService } from './clients-operations.service';
 import { FilterComponent } from './filter/filter.component';
 import { PlaceholderDirective } from './filter/placeholder.directive';
 
@@ -15,7 +16,6 @@ export class ClientsComponent implements OnInit,OnDestroy {
   clients: Client[];
   visibleClients: Client[];
   paged: Client[][] = [];
-  // previousSort: string;
   pages;
   pageIndex:number;
   cities: string[] = [];
@@ -24,7 +24,8 @@ export class ClientsComponent implements OnInit,OnDestroy {
   sub:Subscription;
 
   constructor(private clientsService: ClientsService,
-              private cmpFactoryResolver:ComponentFactoryResolver) { }
+              private cmpFactoryResolver:ComponentFactoryResolver,
+              private clientsOperationsService:ClientsOperationsService) { }
 
   ngOnInit(): void {
     this.clientsService.getClients().subscribe(
@@ -37,8 +38,8 @@ export class ClientsComponent implements OnInit,OnDestroy {
         });
 
         // getting paging
-        this.pages = this.clientsService.paging(clients);
-        this.paged = this.clientsService.getPagedArray(clients, 10);
+        this.pages = this.clientsOperationsService.paging(clients);
+        this.paged = this.clientsOperationsService.getPagedArray(clients, 10);
 
         if( localStorage.getItem("page")){
           this.pageIndex = +localStorage.getItem("page") - 1;
@@ -50,7 +51,11 @@ export class ClientsComponent implements OnInit,OnDestroy {
         }
 
         // sort
-        this.visibleClients = localStorage.getItem("sort")? this.clientsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients,true) : this.visibleClients;
+        this.visibleClients = localStorage.getItem("sort")? this.clientsOperationsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients,true) : this.visibleClients;
+
+        // filter
+        this.visibleClients =  localStorage.getItem("filter")? this.clientsOperationsService.filterClients(JSON.parse(localStorage.getItem("filter")),this.visibleClients):this.visibleClients;
+
 
         this.isLoading = false;
       })
@@ -58,14 +63,15 @@ export class ClientsComponent implements OnInit,OnDestroy {
   }
 
   onSort(string: string) {
-    this.visibleClients = this.clientsService.onSort(string,this.visibleClients);
+    this.visibleClients = this.clientsOperationsService.onSort(string,this.visibleClients);
   }
 
   onNavigate(page) {
     localStorage.setItem("page", page);
     this.pageIndex = page-1;
     this.visibleClients = this.paged[this.pageIndex];
-    this.visibleClients = localStorage.getItem("sort")? this.clientsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients) : this.visibleClients;
+    this.visibleClients = localStorage.getItem("sort")? this.clientsOperationsService.onSort(JSON.parse(localStorage.getItem("sort")).currentSort,this.visibleClients) : this.visibleClients;
+    this.visibleClients =  localStorage.getItem("filter")? this.clientsOperationsService.filterClients(JSON.parse(localStorage.getItem("filter")),this.visibleClients):this.visibleClients;
 
   }
 
