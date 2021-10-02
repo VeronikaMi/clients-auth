@@ -6,6 +6,7 @@ import { Subject } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { Client } from "../shared/models";
 import { AppService } from "../app.service";
+import { AccountsService } from "../accounts/accounts.service";
 
 
 @Injectable({ providedIn: 'root' })
@@ -15,7 +16,8 @@ export class ClientsService {
 
     constructor(private http: HttpClient,
         private router: Router,
-        private appService: AppService) { }
+        private appService: AppService,
+        private accountsService:AccountsService) { }
 
     getClients() {
         return this.http.get<Client[]>(url + "clients").pipe(
@@ -35,6 +37,10 @@ export class ClientsService {
     }
 
     deleteClient(id: number) {
+        this.accountsService.postAccounts(id,[]).subscribe(res=>{
+            console.log(res);
+        });
+
         this.http.delete(url + "clients/" + id).subscribe(response => {
             console.log(response);
             this.router.navigate(["/clients"]);
