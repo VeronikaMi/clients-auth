@@ -7,14 +7,15 @@ import { catchError, map } from "rxjs/operators";
 import { Client } from "../shared/models";
 import { AppService } from "../app.service";
 
-@Injectable({providedIn:'root'})
-export class ClientsService{
+@Injectable({ providedIn: 'root' })
+export class ClientsService {
     clients: Client[] = [];
     notUniqueId: Subject<boolean> = new Subject();
+    // previousSort: string;
 
     constructor(private http: HttpClient,
-                private router: Router,
-                private appService:AppService) {}
+        private router: Router,
+        private appService: AppService) { }
 
     getClients() {
         return this.http.get<Client[]>(url + "clients").pipe(
@@ -23,13 +24,13 @@ export class ClientsService{
                 this.clients = clients;
                 return clients;
             },
-            catchError(error=>{
-                if(error.status === 401){
-                    this.router.navigate(['/auth']);
-                    this.appService.loggedIn.next(false);
-                }
-                return error;
-            }))
+                catchError(error => {
+                    if (error.status === 401) {
+                        this.router.navigate(['/auth']);
+                        this.appService.loggedIn.next(false);
+                    }
+                    return error;
+                }))
         )
     }
 
@@ -68,17 +69,49 @@ export class ClientsService{
     }
 
 
-    sortClients(currentSort, clients) {
+    private sortClients(currentSort, clients, asc:boolean = true) {
         return clients.sort((a, b) => {
             if (a[currentSort] < b[currentSort]) {
-                return -1;
+                return asc? -1 : 1;
             }
             if (a[currentSort] > b[currentSort]) {
-                return 1;
+                return asc? 1 : -1;
             }
             return 0;
         })
     }
+
+
+    onSort(string: string, clients: Client[], isInit:boolean = false) {
+        let visibleClients: Client[] = [];
+        let currentSort = string[0].toLowerCase() + string.substr(1).replace(" ", "");
+        let sorted = {
+            currentSort: currentSort,
+            reversed: false
+        }
+
+        let previousSort = localStorage.getItem("sort")? JSON.parse(localStorage.getItem("sort")).currentSort : "";
+
+        if(isInit){
+            visibleClients = JSON.parse(localStorage.getItem("sort")).reversed? this.sortClients(previousSort, clients,false):this.sortClients(previousSort, clients);
+            sorted.reversed = JSON.parse(localStorage.getItem("sort")).reversed? true:false;
+        }
+        else if (previousSort !== currentSort) {
+            visibleClients = this.sortClients(currentSort, clients);
+            sorted.reversed = false;
+        }
+        else {
+            visibleClients = clients.reverse();
+            sorted.reversed = localStorage.getItem("sort")? !JSON.parse(localStorage.getItem("sort")).reversed: true;
+        }
+
+        previousSort = currentSort;
+        localStorage.setItem("sort", JSON.stringify(sorted));
+
+        return visibleClients;
+    }
+
+
 
     paging(elements: any[]) {
         let pages = [];
@@ -90,8 +123,8 @@ export class ClientsService{
         return pages;
     }
 
-    getPagedArray(array,perPage):Client[][] {
-        var results:Client[][] = [];
+    getPagedArray(array, perPage): Client[][] {
+        var results: Client[][] = [];
         while (array.length) {
             results.push(array.splice(0, perPage));
         }
