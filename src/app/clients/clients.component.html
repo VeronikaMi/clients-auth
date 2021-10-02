@@ -1,7 +1,7 @@
 <div class="clients" *ngIf="!isLoading">
     <div class="btn-group">
         <button type="button" [routerLink]="['/clients', 'new']">{{'add client' | translate}}</button>
-        <button type="button" (click) = "filter = true">{{'filter' | translate}}</button>
+        <button type="button" (click) = "showFilter()">{{'filter' | translate}}</button>
     </div>
     <div class="sorting" (click)="onSort($any($event.target).innerText)">
         <p>{{'firstname' | translate}}</p>
@@ -25,6 +25,8 @@
     </div>
 </div>
 
+<ng-template appPlaceholder></ng-template>
+<!-- 
 <div class="filter" *ngIf = "filter">
     <div class="back">
         <form #form="ngForm" (ngSubmit)="onFilter(form)">
@@ -53,4 +55,4 @@
             </div>
         </form>
     </div>
-</div>
+</div> -->

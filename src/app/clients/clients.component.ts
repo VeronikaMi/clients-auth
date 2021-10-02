@@ -1,25 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Client } from '../shared/models';
 import { ClientsService } from './clients.service';
+import { FilterComponent } from './filter/filter.component';
+import { PlaceholderDirective } from './filter/placeholder.directive';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss']
 })
-export class ClientsComponent implements OnInit {
+export class ClientsComponent implements OnInit,OnDestroy {
   isLoading: boolean = true;
   clients: Client[];
   visibleClients: Client[];
   paged: Client[][] = [];
   previousSort: string;
   pages;
-  filter: boolean = false;
+  pageIndex:number;
   cities: string[] = [];
   countries: string[] = [];
+  @ViewChild(PlaceholderDirective) filterCmp : PlaceholderDirective;
+  sub:Subscription;
 
-  constructor(private clientsService: ClientsService) { }
+  constructor(private clientsService: ClientsService,
+              private cmpFactoryResolver:ComponentFactoryResolver) { }
 
   ngOnInit(): void {
     this.clientsService.getClients().subscribe(
@@ -34,7 +39,14 @@ export class ClientsComponent implements OnInit {
         this.pages = this.clientsService.paging(clients);
         this.paged = this.clientsService.getPagedArray(clients, 10);
 
-        this.visibleClients = localStorage.getItem("page") ? this.paged[+localStorage.getItem("page") - 1] : this.paged[0];
+        if( localStorage.getItem("page")){
+          this.pageIndex = +localStorage.getItem("page") - 1;
+          this.visibleClients = this.paged[this.pageIndex];
+        }
+        else{
+          this.pageIndex = 0;
+          this.visibleClients = this.paged[0];
+        }
 
         if(localStorage.getItem("sort") && JSON.parse(localStorage.getItem("sort")).reversed){
           this.visibleClients =  this.clientsService.sortClients(JSON.parse(localStorage.getItem("sort")).currentSort, this.visibleClients); 
@@ -73,39 +85,33 @@ export class ClientsComponent implements OnInit {
 
   onNavigate(page) {
     localStorage.setItem("page", page);
-    this.visibleClients = this.paged[page - 1];
+    this.pageIndex = page-1;
+    this.visibleClients = this.paged[this.pageIndex];
     this.visibleClients = localStorage.getItem("sort") ? this.clientsService.sortClients(localStorage.getItem("sort"), this.visibleClients) : this.visibleClients;
   }
 
-  onFilter(form:NgForm) {
-    console.log(this.clients);
-    let filtered = {
-      gender:false,
-      city:false,
-      country:false
-    }
+  showFilter(){
+    const filterCmpFactory = this.cmpFactoryResolver.resolveComponentFactory(FilterComponent);
+    const filterCmpRef = this.filterCmp.viewContainerRef;
+    filterCmpRef.clear();
 
-    if(form.value.gender !== 'none'){
-      this.visibleClients = this.clients.filter(client =>{
-        return client.gender.toLowerCase() === form.value.gender.toLowerCase();
-      })
-      filtered.gender = true;
-    }
-    if(form.value.city !== 'none'){
-      this.visibleClients = this.clients.filter(client =>{
-        return client.address.city === form.value.city;
-      })
-      filtered.city = true;
-    }
-    if(form.value.country !== 'none'){
-      this.visibleClients = this.clients.filter(client =>{
-        return client.address.country === form.value.country;
-      })
-      filtered.country = true;
+    const compRef = filterCmpRef.createComponent(filterCmpFactory);
 
-    }
-    localStorage.setItem("filter", JSON.stringify(filtered));
+    compRef.instance.visibleClients = this.paged[this.pageIndex];
+    compRef.instance.cities = this.cities;
+    compRef.instance.countries = this.countries;
 
-    this.filter = false;
+    this.sub = compRef.instance.close.subscribe((clients)=>{
+      this.visibleClients = clients;
+      this.sub.unsubscribe();
+      filterCmpRef.clear();
+    })
   }
+
+  ngOnDestroy(){
+    if(this.sub){
+      this.sub.unsubscribe();
+    }
+  }
+
 }
